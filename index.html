@@ -436,24 +436,43 @@ body{overflow:hidden;}
 .lp.on{
   color:var(--pink);
 }
-.dots{
-  gap:6px;
+.nav-bottom-bar{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
   z-index:20;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  padding:6px 10px calc(8px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top, rgba(4,4,10,.92), rgba(4,4,10,.74), rgba(4,4,10,0));
+  backdrop-filter:blur(3px);
+  pointer-events:none;
+}
+.dots{
+  position:static;
+  left:auto;
+  bottom:auto;
+  transform:none;
+  display:flex;
+  gap:6px;
+  z-index:21;
+  pointer-events:auto;
 }
 .swipe-hint{
-  position:fixed;
-  left:50%;
-  bottom:34px;
-  transform:translateX(-50%);
-  z-index:19;
-  font-size:9px;
+  position:static;
+  transform:none;
+  z-index:21;
+  font-size:8px;
   color:var(--dim);
-  background:rgba(4,4,10,.55);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:3px 8px;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:0;
   letter-spacing:.04em;
-  backdrop-filter:blur(3px);
+  pointer-events:none;
 }
 .dot{
   border:none;
@@ -466,6 +485,9 @@ body{overflow:hidden;}
   width:22px;
   background:var(--cyan);
   box-shadow:0 0 10px rgba(0,245,212,.5);
+}
+.pbody{
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
 }
 .dot:focus-visible,
 button:focus-visible,
@@ -676,6 +698,11 @@ button:focus-visible,
     padding-right:26px;
     padding-bottom:72px;
   }
+  .nav-bottom-bar{
+    background:transparent;
+    backdrop-filter:none;
+    padding-bottom:8px;
+  }
   .swipe-hint{
     display:none;
   }
@@ -697,13 +724,15 @@ button:focus-visible,
   <div class="grid-bg"></div>
   <div class="scan"></div>
 
-  <div class="dots">
-    <button class="dot on" onclick="go(0)" aria-label="Open invite page" aria-current="page"></button>
-    <button class="dot" onclick="go(1)" aria-label="Open schedule page"></button>
-    <button class="dot" onclick="go(2)" aria-label="Open RSVP page"></button>
-    <button class="dot" onclick="go(3)" aria-label="Open jury page"></button>
+  <div class="nav-bottom-bar">
+    <div class="swipe-hint">Swipe left or right to navigate</div>
+    <div class="dots">
+      <button class="dot on" onclick="go(0)" aria-label="Open invite page" aria-current="page"></button>
+      <button class="dot" onclick="go(1)" aria-label="Open schedule page"></button>
+      <button class="dot" onclick="go(2)" aria-label="Open RSVP page"></button>
+      <button class="dot" onclick="go(3)" aria-label="Open jury page"></button>
+    </div>
   </div>
-  <div class="swipe-hint">Swipe left or right to navigate</div>
 
   <div class="pages" id="pages">
 
