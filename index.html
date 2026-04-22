@@ -354,10 +354,11 @@ body{overflow:hidden;}
   animation:scan 7s linear infinite;
 }
 .page{
-  align-items:center;
+  align-items:stretch;
+  overflow:hidden;
 }
 .topbar,.pbody{
-  width:min(100%,var(--card-max));
+  width:100%;
 }
 .topbar{
   padding-top:16px;
@@ -376,6 +377,8 @@ body{overflow:hidden;}
 }
 .pbody{
   padding-bottom:62px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 /* Contrast hardening: ensure all secondary text stays readable */
 .pbody,
@@ -441,53 +444,47 @@ body{overflow:hidden;}
   left:0;
   right:0;
   bottom:0;
-  z-index:20;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:5px;
-  padding:6px 10px calc(8px + env(safe-area-inset-bottom));
+  justify-content:center;
+  gap:2px;
+  padding:6px 10px calc(0px + env(safe-area-inset-bottom));
   background:linear-gradient(to top, rgba(4,4,10,.92), rgba(4,4,10,.74), rgba(4,4,10,0));
   backdrop-filter:blur(3px);
+  z-index:998;
+  pointer-events:none;
+}
+.swipe-hint{
+  font-size:9px;
+  color:var(--dim);
+  letter-spacing:.04em;
+  line-height:1.2;
   pointer-events:none;
 }
 .dots{
   position:static;
-  left:auto;
-  bottom:auto;
   transform:none;
   display:flex;
-  gap:6px;
-  z-index:21;
+  gap:5px;
+  z-index:999;
   pointer-events:auto;
 }
-.swipe-hint{
-  position:static;
-  transform:none;
-  z-index:21;
-  font-size:8px;
-  color:var(--dim);
-  background:transparent;
-  border:none;
-  border-radius:0;
-  padding:0;
-  letter-spacing:.04em;
-  pointer-events:none;
-}
 .dot{
-  border:none;
-  border-radius:999px;
-  width:11px;
+  border-radius:2px;
+  width:14px;
   height:4px;
-  background:rgba(240,238,248,.25);
+  background:rgba(240,238,248,.2);
+  transition:all .4s;
+  cursor:pointer;
 }
 .dot.on{
-  width:22px;
   background:var(--cyan);
-  box-shadow:0 0 10px rgba(0,245,212,.5);
+  width:26px;
+  box-shadow:0 0 7px var(--cyan);
 }
 .pbody{
-  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+  padding-bottom:74px;
 }
 .dot:focus-visible,
 button:focus-visible,
@@ -501,8 +498,22 @@ button:focus-visible,
   font-family:"Instrument Serif",serif;
   color:var(--dim);
 }
-.mtitle .l2,.mtitle .l3{
+.mtitle .l2{
+  font-family:"Syne",sans-serif;
+  font-weight:800;
+  font-size:clamp(36px,10vw,48px);
+  line-height:.88;
+  letter-spacing:-.02em;
   color:var(--white);
+}
+.mtitle .l3{
+  font-family:"Syne",sans-serif;
+  font-weight:800;
+  font-size:clamp(36px,10vw,48px);
+  line-height:.88;
+  letter-spacing:-.02em;
+  color:var(--white);
+  margin-bottom:6px;
 }
 .mtitle .l2 .acc{
   background:linear-gradient(90deg,var(--cyan),var(--violet));
@@ -543,12 +554,24 @@ button:focus-visible,
 .strip-txt strong{color:var(--pink);}
 .soc{
   border-radius:10px;
-  border:1px solid var(--border);
-  padding:8px 5px;
+  border:1px solid rgba(240,238,248,.22);
+  background:rgba(240,238,248,.08);
+  padding:9px 7px;
 }
 .soc:hover{
-  border-color:rgba(0,245,212,.35);
-  background:rgba(0,245,212,.08);
+  border-color:rgba(0,245,212,.45);
+  background:rgba(0,245,212,.12);
+}
+.soc svg{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+}
+.soc-h{
+  font-size:9px;
+  font-weight:700;
+  color:var(--white);
+  letter-spacing:.03em;
 }
 .btn-row{gap:8px;}
 .btn-lime,.btn-violet,.btn-full,.btn-ghost,.btn-accent,.btn-submit,.tab,.jclose,.pax-btn{
@@ -699,9 +722,10 @@ button:focus-visible,
     padding-bottom:72px;
   }
   .nav-bottom-bar{
+    bottom:16px;
+    padding:0;
     background:transparent;
     backdrop-filter:none;
-    padding-bottom:8px;
   }
   .swipe-hint{
     display:none;
@@ -727,10 +751,10 @@ button:focus-visible,
   <div class="nav-bottom-bar">
     <div class="swipe-hint">Swipe left or right to navigate</div>
     <div class="dots">
-      <button class="dot on" onclick="go(0)" aria-label="Open invite page" aria-current="page"></button>
-      <button class="dot" onclick="go(1)" aria-label="Open schedule page"></button>
-      <button class="dot" onclick="go(2)" aria-label="Open RSVP page"></button>
-      <button class="dot" onclick="go(3)" aria-label="Open jury page"></button>
+      <div class="dot on" onclick="go(0)"></div>
+      <div class="dot" onclick="go(1)"></div>
+      <div class="dot" onclick="go(2)"></div>
+      <div class="dot" onclick="go(3)"></div>
     </div>
   </div>
 
@@ -744,12 +768,7 @@ button:focus-visible,
   </div>
   <div class="big-num">10</div>
   <div class="pbody">
-    <div class="eyebrow" style="margin-top:6px">
-      <div class="ebdot"></div>
-      <div class="ebtxt">Top 10 Finalists — You Made It.</div>
-    </div>
     <div class="mtitle">
-      <span class="l1">Welcome to the</span>
       <span class="l2"><span class="acc">Grand</span></span>
       <span class="l3">Finale.</span>
     </div>
@@ -758,15 +777,6 @@ button:focus-visible,
       <div class="caption-txt">
         <strong>Enroute to RM10,000</strong>
         <em>Build a solution. Fix a real problem. Change an industry.</em>
-      </div>
-    </div>
-    <div style="background:rgba(240,238,248,.04);border:1px solid rgba(0,245,212,.15);border-radius:12px;padding:12px 14px;margin-bottom:10px;position:relative;z-index:2;">
-      <div style="font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:7px;">⚡ This is not just a hackathon</div>
-      <div style="font-size:10.5px;color:var(--white);line-height:1.65;">
-        You're not here to just build a prototype.<br><br>
-        You're here to <strong style="color:var(--lime);">pitch an AI-powered solution</strong> — one that solves a real industry problem, drives productivity, and has the potential to become a <strong style="color:var(--cyan);">product that matters</strong> for Malaysia's digital future.<br><br>
-        <span style="color:var(--dim);font-size:10px;">The jury wants to see <strong style="color:var(--white);">impact, vision and execution</strong> — not just working code.</span>
-        
       </div>
     </div>
     <div class="stats">
@@ -785,13 +795,23 @@ button:focus-visible,
         <div class="dv-ico" style="font-size:11px;margin-top:4px">📡</div><div class="dv-txt">Live<br>Stream</div>
       </div>
     </div>
-    <div class="strip" style="background:rgba(0,245,212,0.06);border:1px solid rgba(0,245,212,0.2);border-radius:10px;margin-bottom:9px;padding:9px 12px;display:flex;align-items:flex-start;gap:9px;">
-      <div style="font-size:14px;flex-shrink:0;">📡</div>
-      <div style="font-size:10px;color:var(--white);line-height:1.5;">Invite your friends & family to <strong style="color:var(--cyan);">watch the Grand Finale LIVE</strong> on our socials — physical attendance is by invite only.</div>
+    <div class="strip" style="background:rgba(240,238,248,.04);border:1px solid rgba(240,238,248,.12);padding:10px 12px;">
+      <div style="width:100%;">
+        <div style="font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:7px;">⭐ Guest of Honour · Prize Presenter</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <img src="data:image/jpeg;base64,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" alt="Lt Col Abu Bakar" style="width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid rgba(200,255,0,.35);box-shadow:0 0 12px rgba(200,255,0,.25);flex-shrink:0;"/>
+          <div>
+            <div style="font-size:12px;font-weight:800;color:var(--white);line-height:1.2;">Lt Col Abu Bakar bin Ismail</div>
+            <div style="font-size:10px;font-weight:700;color:var(--lime);line-height:1.4;">Head of Engineering Squadron</div>
+            <div style="font-size:9px;color:var(--dim);line-height:1.4;">Strategic Operations Regiment</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.3);border-radius:999px;padding:4px 9px;color:var(--lime);font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">🏆 Presenting Awards on Stage · Day 2</div>
+      </div>
     </div>
-    <div class="strip pink">
-      <div class="strip-ico">⚡</div>
-      <div class="strip-txt"><strong>Day 1 — Finalists, jury & management only.</strong> No outside guests. Day 2 open to invited guests only.</div>
+    <div class="strip" style="background:rgba(123,97,255,.1);border:1px solid rgba(123,97,255,.35);align-items:center;">
+      <div class="strip-ico">🎟</div>
+      <div class="strip-txt"><strong style="color:var(--white);">Day 2 — Invited Guests Only</strong><br><span style="color:var(--dim);">Physical attendance by RSVP only. Watch live on our social media platforms.</span></div>
     </div>
     <div class="socials">
       <a class="soc" href="https://www.instagram.com/nexperts?igsh=MTZxbTk1dm52ZG93NA%3D%3D&utm_source=qr" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -848,6 +868,20 @@ button:focus-visible,
     </div>
     <!-- DAY 2 -->
     <div id="day2" class="tl" style="display:none;">
+      <div class="strip" style="background:rgba(240,238,248,.04);border:1px solid rgba(240,238,248,.12);padding:10px 12px;">
+        <div style="width:100%;">
+          <div style="font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:7px;">⭐ Guest of Honour · Prize Presenter</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <img id="goh-photo-day2" alt="Lt Col Abu Bakar" style="width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid rgba(200,255,0,.35);box-shadow:0 0 12px rgba(200,255,0,.25);flex-shrink:0;"/>
+            <div>
+              <div style="font-size:12px;font-weight:800;color:var(--white);line-height:1.2;">Lt Col Abu Bakar bin Ismail</div>
+              <div style="font-size:10px;font-weight:700;color:var(--lime);line-height:1.4;">Head of Engineering Squadron</div>
+              <div style="font-size:9px;color:var(--dim);line-height:1.4;">Strategic Operations Regiment</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.3);border-radius:999px;padding:4px 9px;color:var(--lime);font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">🏆 Presenting Awards on Stage · Day 2</div>
+        </div>
+      </div>
       <div class="tlrow"><div class="tll"><div class="tlt">8:00<br>AM</div><div class="tld"></div><div class="tlline"></div></div><div class="tlr"><div class="tc inv"><div class="tc-t">Arrival & Guest Check-in</div><div class="tc-d">Finalists & jury. <span class="hp">Outside guests by invite only.</span> Strictly no walk-ins.</div></div></div></div>
       <div class="tlrow"><div class="tll"><div class="tlt">9:00<br>AM</div><div class="tld sp"></div><div class="tlline"></div></div><div class="tlr"><div class="tc sp"><div class="tc-t">🎤 Final Pitches</div><div class="tc-d"><span class="hl">Top 5 teams</span> pitch their product solutions to jury, industry partners & invited guests. Rigorous Q&A. Think Shark Tank — own the room.</div></div></div></div>
       <div class="tlrow"><div class="tll"><div class="tlt">After<br>Pitches</div><div class="tld kp"></div><div class="tlline"></div></div><div class="tlr"><div class="tc kp"><div class="tc-t">🏆 Prize Giving Ceremony</div><div class="tc-d"><span class="hp">🥇 Champion — RM10,000 &nbsp;🥈 2nd Prize &nbsp;🥉 3rd Prize.</span> Awards, photos & glory on stage.</div></div></div></div>
@@ -859,9 +893,28 @@ button:focus-visible,
         <div class="lp">📣 Invite Crew to Watch Live</div>
       </div>
     </div>
-    <div class="btn-row" style="margin-top:10px;">
-      <button class="btn-ghost" onclick="go(0)">← Invite</button>
-      <button class="btn-accent" onclick="go(2)">RSVP Day 2 ✦</button>
+    <div style="font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin:10px 0 7px;">📡 Watch Live on Socials</div>
+    <div class="socials" style="margin-bottom:12px;">
+      <a class="soc" href="https://www.instagram.com/nexperts?igsh=MTZxbTk1dm52ZG93NA%3D%3D&utm_source=qr" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="ig-programme" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#ffd600"/><stop offset="50%" stop-color="#ff0069"/><stop offset="100%" stop-color="#7638fa"/></radialGradient></defs>
+<rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig-programme)"/>
+<circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+<circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+</svg><span class="soc-h">nexperts</span></a>
+      <a class="soc" href="https://www.tiktok.com/@iamvaheedtech?_r=1&_t=ZS-95id2rkqytc" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" rx="6" fill="black"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="white"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="#69C9D0" opacity="0.5"/>
+</svg><span class="soc-h">TheITCouple</span></a>
+      <a class="soc" href="https://www.tiktok.com/@nexperts_academy?_r=1&_t=ZS-95idaDxMPv0" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" rx="6" fill="black"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="white"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="#69C9D0" opacity="0.5"/>
+</svg><span class="soc-h">NexpertsAcademy</span></a>
+    </div>
+    <div class="btn-row" style="margin-top:10px;margin-bottom:12px;">
+      <button class="btn-ghost" style="color:var(--white);border-color:rgba(240,238,248,.28);" onclick="go(0)">← Invite</button>
+      <button class="btn-accent" style="color:var(--white);" onclick="go(2)">RSVP Day 2 ✦</button>
     </div>
   </div>
 </div>
@@ -930,6 +983,25 @@ button:focus-visible,
       <h2>Your Jury.<br>Know Them.</h2>
       <div class="ph-sub">Tap a judge — read their profile & the MC question for the day.</div>
     </div>
+    <div style="font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin:2px 0 7px;">📡 Watch Live on Socials</div>
+    <div class="socials" style="margin-bottom:12px;">
+      <a class="soc" href="https://www.instagram.com/nexperts?igsh=MTZxbTk1dm52ZG93NA%3D%3D&utm_source=qr" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="ig-jury" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#ffd600"/><stop offset="50%" stop-color="#ff0069"/><stop offset="100%" stop-color="#7638fa"/></radialGradient></defs>
+<rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig-jury)"/>
+<circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+<circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+</svg><span class="soc-h">nexperts</span></a>
+      <a class="soc" href="https://www.tiktok.com/@iamvaheedtech?_r=1&_t=ZS-95id2rkqytc" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" rx="6" fill="black"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="white"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="#69C9D0" opacity="0.5"/>
+</svg><span class="soc-h">TheITCouple</span></a>
+      <a class="soc" href="https://www.tiktok.com/@nexperts_academy?_r=1&_t=ZS-95idaDxMPv0" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" rx="6" fill="black"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="white"/>
+<path d="M16.5 5.5C16.8 6.9 17.7 7.6 19 7.8V10.1C18 10 17.1 9.7 16.5 9.2V14.5C16.5 17 14.5 19 12 19C9.5 19 7.5 17 7.5 14.5C7.5 12 9.5 10 12 10C12.2 10 12.4 10 12.6 10.1V12.4C12.4 12.4 12.2 12.3 12 12.3C10.8 12.3 9.8 13.3 9.8 14.5C9.8 15.7 10.8 16.7 12 16.7C13.2 16.7 14.2 15.7 14.2 14.5V5.5H16.5Z" fill="#69C9D0" opacity="0.5"/>
+</svg><span class="soc-h">NexpertsAcademy</span></a>
+    </div>
     <div class="jury-grid" id="jury-grid">
       <div class="jury-card" onclick="expandJury(0)">
         <img class="jury-photo" src="data:image/jpeg;base64,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" alt="Lakshmikanth"/>
@@ -997,7 +1069,7 @@ button:focus-visible,
       </div>
     </div>
     <div class="jury-expand" id="jury-expand">
-      <button class="jclose" onclick="closeJury()">✕ Close</button>
+      <button class="jclose" onclick="closeJury()">← Back to Jury Panel</button>
       <div class="exp-top">
         <img class="exp-photo" id="exp-photo" src="" alt=""/>
         <div><div class="exp-name" id="exp-name"></div><div class="exp-role" id="exp-role"></div></div>
@@ -1010,7 +1082,7 @@ button:focus-visible,
     </div>
     <div class="btn-row" id="jury-nav" style="margin-top:10px;">
       <button class="btn-ghost" onclick="go(0)">← Invite</button>
-      <button class="btn-accent" onclick="go(2)">RSVP Day 2 ✦</button>
+      <button class="btn-accent" style="color:var(--white);" onclick="go(2)">RSVP Day 2 ✦</button>
     </div>
   </div>
 </div>
@@ -1177,6 +1249,11 @@ button:focus-visible,
     if (e.key === 'ArrowRight' && currentPage < 3) go(currentPage + 1);
     if (e.key === 'ArrowLeft' && currentPage > 0) go(currentPage - 1);
   });
+
+  // Reuse Guest of Honour image in Schedule Day 2 card.
+  const gohSource = document.querySelector('.page:first-child img[alt="Lt Col Abu Bakar"]');
+  const gohDay2 = document.getElementById('goh-photo-day2');
+  if (gohSource && gohDay2) gohDay2.src = gohSource.src;
 </script>
 
 </body>
