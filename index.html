@@ -358,6 +358,7 @@ body{overflow:hidden;}
 }
 .page{
   align-items:stretch;
+  min-height:0;
   overflow:hidden;
 }
 .topbar,.pbody{
@@ -487,7 +488,12 @@ body{overflow:hidden;}
   box-shadow:0 0 7px var(--cyan);
 }
 .pbody{
-  padding-bottom:74px;
+  min-height:0;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  overscroll-behavior:contain;
+}
+.btn-lime,.btn-violet,.btn-full,.btn-ghost,.btn-accent,.btn-submit,.tab,.jclose,.pax-btn,.soc,.dot{
+  touch-action:manipulation;
 }
 .dot:focus-visible,
 button:focus-visible,
@@ -1268,16 +1274,33 @@ button:focus-visible,
     document.getElementById('jury-nav').style.display = 'flex';
   }
 
-  // Swipe support
+  // Swipe support (ignore taps/scroll on interactive elements)
   let tx = 0;
-  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
-  document.addEventListener('touchend', e => {
-    const diff = tx - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 60) {
-      if (diff > 0 && currentPage < 3) go(currentPage + 1);
-      else if (diff < 0 && currentPage > 0) go(currentPage - 1);
-    }
-  }, {passive:true});
+  let ty = 0;
+  let shouldTrackSwipe = false;
+  const pagesEl = document.getElementById('pages');
+  const isInteractiveTarget = target => !!target.closest('button,a,input,textarea,select,label,.dot,.jury-card,.pax-btn');
+  if (pagesEl) {
+    pagesEl.addEventListener('touchstart', e => {
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      tx = touch.clientX;
+      ty = touch.clientY;
+      shouldTrackSwipe = !isInteractiveTarget(e.target);
+    }, {passive:true});
+    pagesEl.addEventListener('touchend', e => {
+      if (!shouldTrackSwipe) return;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (!touch) return;
+      const dx = tx - touch.clientX;
+      const dy = ty - touch.clientY;
+      // Handle only intentional horizontal swipe, not vertical page scroll.
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0 && currentPage < 3) go(currentPage + 1);
+        else if (dx < 0 && currentPage > 0) go(currentPage - 1);
+      }
+    }, {passive:true});
+  }
   document.addEventListener('keydown', e => {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
     const focused = document.activeElement;
