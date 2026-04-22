@@ -133,6 +133,18 @@ border:1px solid rgba(123,97,255,.3);border-radius:12px;padding:12px 14px;
 .dm-lbl{font-size:7.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(–violet);margin-bottom:4px;}
 .dm-date{font-weight:800;font-size:18px;color:var(–white);letter-spacing:-.01em;line-height:1.1;}
 .dm-sub{font-size:8.5px;color:var(–dim);margin-top:2px;line-height:1.5;}
+.dm-row{display:flex;align-items:flex-start;gap:10px;margin-top:8px;}
+.dm-row .dm-sub{margin-top:0;}
+.venue-photo{
+width:56px;
+height:56px;
+border-radius:50%;
+object-fit:cover;
+object-position:center;
+flex-shrink:0;
+border:2px solid rgba(0,245,212,.35);
+box-shadow:0 0 0 2px rgba(123,97,255,.18),0 6px 16px rgba(0,0,0,.28);
+}
 .date-side{
 width:72px;background:rgba(240,238,248,.03);border:1px solid var(–border);
 border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;
@@ -549,6 +561,18 @@ button:focus-visible,
 }
 .dm-lbl{color:var(--violet);}
 .dm-sub{line-height:1.55;}
+.dm-row{
+  gap:11px;
+}
+.venue-photo{
+  width:58px;
+  height:58px;
+  margin-top:0;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid rgba(0,245,212,.42);
+  box-shadow:0 0 0 2px rgba(123,97,255,.2),0 8px 20px rgba(0,0,0,.28);
+}
 .date-side{
   width:84px;
   border-radius:14px;
@@ -830,7 +854,10 @@ button:focus-visible,
       <div class="date-main">
         <div class="dm-lbl">📅 When & Where</div>
         <div class="dm-date">8th & 9th May 2026</div>
-        <div class="dm-sub">Fri 8AM · Sat 8AM<br>Tiara Rini Ballroom, Level 1<br>Royale Chulan Hotel, The Curve, Petaling Jaya<br><span style="color:var(--cyan);font-size:8px;font-weight:600;">See schedule for full details →</span></div>
+        <div class="dm-row">
+          <img class="venue-photo" src="https://res.klook.com/klook-hotel/image/upload/w_750,c_fill,q_85/travelapi/10000000/9500000/9494200/9494105/ef7bef49_z.jpg" alt="Royale Chulan Hotel, The Curve"/>
+          <div class="dm-sub">Fri 8AM · Sat 8AM<br>Tiara Rini Ballroom, Level 1<br>Royale Chulan Hotel, The Curve, Petaling Jaya<br><span style="color:var(--cyan);font-size:8px;font-weight:600;">See schedule for full details →</span></div>
+        </div>
       </div>
       <div class="date-side">
         <div class="dv-ico">🏨</div><div class="dv-txt">Petaling<br>Jaya</div>
